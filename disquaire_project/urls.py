@@ -18,12 +18,16 @@ from django.contrib import admin
 from django.conf.urls import  url
 from django.urls import path, include
 from store import views
+from django.contrib.staticfiles.urls import static, staticfiles_urlpatterns
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^store/', include(('store.urls', 'store'), namespace='store')),
     url(r'^admin/', admin.site.urls)
 ]
+
+urlpatterns += staticfiles_urlpatterns()
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # urlpatterns = [
 #     url(r'^$', views.index, name="index"),

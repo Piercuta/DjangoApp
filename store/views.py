@@ -15,12 +15,13 @@ def index(request):
     # note that we don't use album['name'] anymore but album.name
     # because it's now an attribute.
   
-    context = {'albums': convert_img_albums(albums)}
+    # context = {'albums': convert_img_albums(albums)}
+    context = {'albums': albums}
     return render(request, 'store/index.html', context)
 
 def listing(request):
     albums_list = Album.objects.filter(available=True)
-    albums_list = convert_img_albums(albums_list)
+    # albums_list = convert_img_albums(albums_list)
     paginator = Paginator(albums_list, 3)
     page = request.GET.get('page')
     try:
@@ -47,7 +48,8 @@ def detail(request, album_id):
         'album_title': album.title,
         'artists_name': artists_name,
         'album_id': album.id,
-        'img': base64.b64encode(album.img).decode('utf-8') if album.img else ""
+        'album_picture': album.picture
+        # 'img': base64.b64encode(album.img).decode('utf-8') if album.img else ""
     }
     if request.method == 'POST':
         form = ContactForm(request.POST, error_class=ParagraphErrorList)
@@ -103,7 +105,8 @@ def search(request):
 
     title = "Résultats pour la requête %s"%query
     context = {
-        'albums': convert_img_albums(albums),
+        # 'albums': convert_img_albums(albums),
+        'albums': albums,
         'title': title
     }
     return render(request, 'store/search.html', context)
