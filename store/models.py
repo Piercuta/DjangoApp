@@ -27,7 +27,7 @@ class Album(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     available = models.BooleanField(default=True)
     title = models.CharField(max_length=200)
-    picture = models.ImageField(upload_to='images/', blank=True, null = True)
+    picture = models.BinaryField(null=True, editable=True) #models.ImageField(upload_to='images/', blank=True, null = True)
     artists = models.ManyToManyField(Artist, related_name='albums', blank=True)
     # img = models.BinaryField(null = True)
 
