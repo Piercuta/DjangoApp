@@ -6,31 +6,48 @@
 <hr class="detail-separator">
 <div class="col-md-6">
   <!-- <img src="data:image/jpeg;base64, {{ img }}" alt="{{ album_title }}" class="img-responsive" width="500", height="500"> -->
-  <img src="{% static {{ album_picture.url }} %}" alt="{{ album_title }}" class="img-responsive" width="500", height="500">
+  <img src="{{ album_picture.url }}" alt="{{ album_title }}" class="img-responsive" width="500", height="500">
 </div>
 <div class="col-md-6">
   <div style="margin-bottom:45px">
     <h2 class="text-center artist_name">Artistes</h2>
-    <p>{{ artists_name }}</p>
+    <p class="text-center">{{ artists_name }}</p>
   </div>
+    <h2 class="text-center artist_name">Description</h2>
+    <p>Nam varius ut eros eu cursus. Mauris vestibulum nisl eros, mattis malesuada quam aliquet vel. Quisque sed est nec ipsum scelerisque egestas. Vestibulum ac accumsan metus, vitae vestibulum magna. Aliquam ligula lacus, hendrerit sit amet.</p>
 
   <h2 class="text-center artist_name">Réserver {{ album_title }}</h2>
   <p style="margin-bottom: 20px;">Demandez-nous de mettre de côté {{ album_title }} et venez le chercher dès demain en magasin ! </p>
-  <form class="form-inline" action="{% url 'store:detail' album_id=album_id %}" method="post">
+  <form class="form-horizontal" action="{% url 'store:detail' album_id=album_id %}" method="post">
     {% csrf_token %}
-    <div class="form-group {% if form.name.errors %}has-warning has-feedback{% endif %}">
-      <label for="{{ form.name.id_for_label }}" class="control-label">Nom</label>
-      <!-- <input type="text" name="name" value="" id="name"> -->
-      {{ form.name }}
-    </div>
-    <div class="form-group {% if form.email.errors %}has-warning has-feedback{% endif %}">
-      <label for="{{ form.email.id_for_label }}" class="control-label">E-mail</label>
-      <!-- <input type="text" name="email" value="" id="email"> -->
-      {{ form.email }}
-    </div>
+    <!-- <div class="row"> -->
+      <div class="form-group {% if form.name.errors %}has-warning has-feedback{% endif %}">
+        <label for="{{ form.name.id_for_label }}" class="col-sm-2 control-label">Nom : </label>
+        <!-- <input type="text" name="name" value="" id="name"> -->
+        <div class="col-sm-10">
+          {{ form.name }}
+        </div>
+      </div>
+    <!-- </div> -->
+    <!-- <div class="row"> -->
+      <div class="form-group {% if form.email.errors %}has-warning has-feedback{% endif %}">
+        <label for="{{ form.email.id_for_label }}" class="col-sm-2 control-label">E-mail : </label>
+        <!-- <input type="text" name="email" value="" id="email"> -->
+        <div class="col-sm-10">
+          {{ form.email }}
+        </div>
+      
+      </div>
+    <!-- </div> -->
     <!-- <input type="hidden" class="hidden" value="{{ album.id }}" name="album_id"> -->
-
-    <button type="submit" class="btn btn-success">Réserver</button>
+    <!-- <div class="row"> -->
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button type="submit" class="btn btn-success">Réserver</button>
+        </div>
+      </div>  
+      
+    <!-- </div> -->
   </form>
 
       {% if errors %}
