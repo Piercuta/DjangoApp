@@ -22,11 +22,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'c@n%u@91tum=@j392g20b8znh7dqfo-v%81))gxbbmu$=dy_*)') # development key for the moment
+# development key for the moment
+SECRET_KEY = os.environ.get(
+    'SECRET_KEY', 'c@n%u@91tum=@j392g20b8znh7dqfo-v%81))gxbbmu$=dy_*)')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-
-
 
 
 # Application definition
@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-	'debug_toolbar',
+    'debug_toolbar',
     'store.apps.StoreConfig',
 ]
 
@@ -51,7 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-	'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.locale.LocaleMiddleware',
 ]
 
@@ -82,16 +82,16 @@ WSGI_APPLICATION = 'disquaire_project.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
-	'default': {
+    'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'djangodb',
-        'USER': 'root',
-        'PASSWORD': 'rrrrr',
-        'HOST': 'localhost',
+        'USER': 'admin',
+        'PASSWORD': 'Coucou123!',
+        'HOST': 'piercuta-prod-djangoapp-db-mysql.ceaxgvpd3ste.eu-west-1.rds.amazonaws.com',
         'PORT': '3306',
         # 'ATOMIC_REQUESTS': True,
     }
-    
+
 }
 
 
@@ -147,7 +147,7 @@ if os.environ.get('ENV') == 'PRODUCTION':
         os.path.join(PROJECT_ROOT, 'static'),
     )
 
-     # Simplified static file serving.
+    # Simplified static file serving.
     # https://warehouse.python.org/project/whitenoise/
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 

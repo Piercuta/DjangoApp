@@ -48,7 +48,7 @@ Parameters:
   GitRepo:
     Type: String
     Description: ...
-    Default: ChoixRestoHtmlCss
+    Default: DjangoApp
   GithubUser:
     Type: String
     Description: ...
@@ -56,7 +56,7 @@ Parameters:
   ApplicationName:
     Type: String
     Description: ...
-    Default: choixresto
+    Default: djangoapp
   DllToStart:
     Type: String
     Description: ...
@@ -481,7 +481,7 @@ Resources:
         - Ref: AutoScalingGroup
       LoadBalancerInfo:
         TargetGroupInfoList:
-          - Name: !GetAtt ALBTargetGroup5000.TargetGroupName
+          - Name: !GetAtt ALBTargetGroup8000.TargetGroupName
       AutoRollbackConfiguration:
         Enabled: true
         Events:
