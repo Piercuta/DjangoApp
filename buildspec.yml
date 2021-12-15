@@ -15,4 +15,4 @@ phases:
         -  mysql -h $RdsEndpoint -u admin -pCoucou123! < DumpDjangoDb.sql 
         # replace connection string in appsettings.json
         # MakeFile build (dotnet publish)
-        - make build
+        - make init

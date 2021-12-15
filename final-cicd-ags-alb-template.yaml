@@ -6,6 +6,18 @@ Parameters:
     Description: Please enter the IP range (CIDR notation) for this VPC
     Type: String
     Default: 10.192.0.0/16
+  PrivateSubnet1CIDR:
+    Description: Please enter the IP range (CIDR notation) for the public subnet in the first Availability Zone
+    Type: String
+    Default: 10.192.20.0/24
+  PrivateSubnet2CIDR:
+    Description: Please enter the IP range (CIDR notation) for the public subnet in the second Availability Zone
+    Type: String
+    Default: 10.192.21.0/24
+  PrivateSubnet3CIDR:
+    Description: Please enter the IP range (CIDR notation) for the public subnet in the second Availability Zone
+    Type: String
+    Default: 10.192.22.0/24
   PublicSubnet1CIDR:
     Description: Please enter the IP range (CIDR notation) for the public subnet in the first Availability Zone
     Type: String
@@ -105,7 +117,7 @@ Resources:
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
-          Value: !Sub ${Client}-${Env}-public-subnet-az1
+          Value: !Sub ${Client}-${Env}-public-subnet-1
         - Key: env
           Value: !Ref Env
 
@@ -118,30 +130,30 @@ Resources:
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
-          Value: !Sub ${Client}-${Env}-public-subnet-az2
+          Value: !Sub ${Client}-${Env}-public-subnet-2
         - Key: env
           Value: !Ref Env
-  
+
   PublicSubnet3:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
-      AvailabilityZone: !Select [ 2, !GetAZs  '' ]
+      AvailabilityZone: !Select [ 1, !GetAZs  '' ]
       CidrBlock: !Ref PublicSubnet3CIDR
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
-          Value: !Sub ${Client}-${Env}-public-subnet-az3
+          Value: !Sub ${Client}-${Env}-public-subnet-3
         - Key: env
           Value: !Ref Env
- 
+  
   PublicRouteTable:
     Type: AWS::EC2::RouteTable
     Properties:
       VpcId: !Ref VPC
       Tags:
         - Key: Name
-          Value: !Sub ${Client}-${Env}-public-route
+          Value: !Sub ${Client}-${Env}-public-route-table
         - Key: env
           Value: !Ref Env
 
@@ -164,13 +176,196 @@ Resources:
     Properties:
       RouteTableId: !Ref PublicRouteTable
       SubnetId: !Ref PublicSubnet2
-
+  
   PublicSubnet3RouteTableAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       RouteTableId: !Ref PublicRouteTable
       SubnetId: !Ref PublicSubnet3
+
+  PrivateSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 0, !GetAZs  '' ]
+      CidrBlock: !Ref PrivateSubnet1CIDR
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub ${Client}-${Env}-private-subnet-1
+        - Key: env
+          Value: !Ref Env
+
+  PrivateSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 1, !GetAZs  '' ]
+      CidrBlock: !Ref PrivateSubnet2CIDR
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub ${Client}-${Env}-private-subnet-2
+        - Key: env
+          Value: !Ref Env
+
+  PrivateSubnet3:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 2, !GetAZs  '' ]
+      CidrBlock: !Ref PrivateSubnet3CIDR
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub ${Client}-${Env}-private-subnet-3
+        - Key: env
+          Value: !Ref Env
+
+  NatGateway1EIP:
+    Type: AWS::EC2::EIP
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      Domain: vpc
+      Tags:
+        - Key: env
+          Value: !Ref Env
+        - Key: Name
+          Value: !Sub ${Client}-${Env}-eip-1
+
+  NatGateway2EIP:
+    Type: AWS::EC2::EIP
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      Domain: vpc
+      Tags:
+        - Key: env
+          Value: !Ref Env
+        - Key: Name
+          Value: !Sub ${Client}-${Env}-eip-2
+
+  NatGateway3EIP:
+    Type: AWS::EC2::EIP
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      Domain: vpc
+      Tags:
+        - Key: env
+          Value: !Ref Env
+        - Key: Name
+          Value: !Sub ${Client}-${Env}-eip-3
+
+  NatGateway1:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt NatGateway1EIP.AllocationId
+      SubnetId: !Ref PublicSubnet1
+      Tags:
+        - Key: env
+          Value: !Ref Env
+        - Key: Name
+          Value: !Sub ${Client}-${Env}-nat-gtw-1
+
+  NatGateway2:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt NatGateway2EIP.AllocationId
+      SubnetId: !Ref PublicSubnet2
+      Tags:
+        - Key: env
+          Value: !Ref Env
+        - Key: Name
+          Value: !Sub ${Client}-${Env}-nat-gtw-2
+
+  NatGateway3:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt NatGateway3EIP.AllocationId
+      SubnetId: !Ref PublicSubnet3
+      Tags:
+        - Key: env
+          Value: !Ref Env
+        - Key: Name
+          Value: !Sub ${Client}-${Env}-nat-gtw-3
   
+  PrivateRouteTable1:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub ${Client}-${Env}-private-route-table-1
+        - Key: env
+          Value: !Ref Env
+
+  DefaultPrivateRoute1:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable1
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref NatGateway1
+      # Tags:
+      #   - Key: Name
+      #     Value: !Sub ${Client}-${Env}-default-private-route-1
+
+  PrivateSubnet1RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable1
+      SubnetId: !Ref PrivateSubnet1
+
+  PrivateRouteTable2:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub ${Client}-${Env}-private-route-table-2
+        - Key: env
+          Value: !Ref Env
+
+  DefaultPrivateRoute2:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable2
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref NatGateway2
+      # Tags:
+      #   - Key: Name
+      #     Value: !Sub ${Client}-${Env}-default-private-route-3
+
+  PrivateSubnet2RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable2
+      SubnetId: !Ref PrivateSubnet2
+
+  PrivateRouteTable3:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub ${Client}-${Env}-private-route-table-3
+        - Key: env
+          Value: !Ref Env
+
+  DefaultPrivateRoute3:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable3
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref NatGateway3
+      # Tags:
+      #   - Key: Name
+      #     Value: !Sub ${Client}-${Env}-default-private-route-3
+
+  PrivateSubnet3RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable3
+      SubnetId: !Ref PrivateSubnet3
+
   # Database
   
   InstanceSubnetGroup:
@@ -179,9 +374,9 @@ Resources:
       DBSubnetGroupDescription: subnet group for instance mysql
       DBSubnetGroupName: !Sub ${Client}-${Env}-${ApplicationName}-rds-subnet-group
       SubnetIds: 
-        - !Ref PublicSubnet1
-        - !Ref PublicSubnet2
-        - !Ref PublicSubnet3
+        - !Ref PrivateSubnet1
+        - !Ref PrivateSubnet2
+        - !Ref PrivateSubnet3
       Tags: 
         - Key: env
           Value: !Ref Env
@@ -193,6 +388,10 @@ Resources:
       VpcId: !Ref VPC
       GroupDescription: SecurityGroup for RDS instance.
       SecurityGroupIngress:
+        - SourceSecurityGroupId: !GetAtt CodeBuildSecurityGroup.GroupId 
+          FromPort: '3306'
+          ToPort: '3306'
+          IpProtocol: tcp
         - SourceSecurityGroupId: !GetAtt EC2SecurityGroup.GroupId 
           FromPort: '3306'
           ToPort: '3306'
@@ -307,9 +506,9 @@ Resources:
       SecurityGroups:
         - !Ref ALBSecurityGroup
       Subnets: 
-        - !Ref PublicSubnet1
-        - !Ref PublicSubnet2
-        - !Ref PublicSubnet3
+        - !Ref PrivateSubnet1
+        - !Ref PrivateSubnet2
+        - !Ref PrivateSubnet3
       Tags:
         - Key: Name
           Value: !Sub ${Client}-${Env}-${ApplicationName}-alb
@@ -386,9 +585,9 @@ Resources:
     Properties:
       AutoScalingGroupName: !Sub ${Client}-${Env}-${ApplicationName}-asg
       VPCZoneIdentifier: 
-        - !Ref PublicSubnet1
-        - !Ref PublicSubnet2
-        - !Ref PublicSubnet3
+        - !Ref PrivateSubnet1
+        - !Ref PrivateSubnet2
+        - !Ref PrivateSubnet3
       LaunchTemplate:
         LaunchTemplateId: !Ref AutoScalingLaunchTemplate
         Version: !GetAtt 
@@ -527,6 +726,23 @@ Resources:
         - Key: env
           Value: !Ref Env
 
+  CodeBuildSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: !Sub ${Client}-${Env}-${ApplicationName}-code-build-sg
+      GroupDescription: "Security group for code build"
+      SecurityGroupEgress:
+      - IpProtocol: -1
+        FromPort: -1
+        ToPort: -1
+        CidrIp: 0.0.0.0/0
+      VpcId: !Ref VPC
+      Tags: 
+        - Key: env
+          Value: !Ref Env
+        - Key: Name
+          Value: !Sub ${Client}-${Env}-${ApplicationName}-code-build-sg
+
   CodeBuild:
     Type: 'AWS::CodeBuild::Project'
     Properties:
@@ -565,6 +781,14 @@ Resources:
                 - ;database=ChoixResto
       Source:
         Type: CODEPIPELINE
+      VpcConfig:
+        SecurityGroupIds: 
+          - !Ref CodeBuildSecurityGroup
+        Subnets: 
+          - !Ref PrivateSubnet1
+          - !Ref PrivateSubnet2
+          - !Ref PrivateSubnet3
+        VpcId: !Ref VPC
       Tags: 
         - Key: env
           Value: !Ref Env
