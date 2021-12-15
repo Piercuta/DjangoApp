@@ -8,10 +8,11 @@ phases:
         runtime-versions:
             python: 3.7
         commands:
+        - yum install mysql -y
         - ls -hal
     build:
         commands:
-        -  mysql -h $RdsEndpoint -u root -prrrrr < DumpDjangoDb.sql 
+        -  mysql -h $RdsEndpoint -u admin -pCoucou123! < DumpDjangoDb.sql 
         # replace connection string in appsettings.json
         # MakeFile build (dotnet publish)
         - make build
