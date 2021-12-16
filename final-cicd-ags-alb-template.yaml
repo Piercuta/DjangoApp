@@ -621,7 +621,7 @@ Resources:
     Properties:
       LaunchTemplateName: !Sub ${Client}-${Env}-${ApplicationName}-lt
       LaunchTemplateData:
-        ImageId: ami-04dd4500af104442f
+        ImageId: ami-08ca3fed11864d6bb
         InstanceType: t2.micro
         IamInstanceProfile:
           Name: !Ref EC2InstanceProfile
@@ -759,7 +759,7 @@ Resources:
       Environment:
         Type: LINUX_CONTAINER
         ComputeType: BUILD_GENERAL1_SMALL
-        Image: 'aws/codebuild/amazonlinux2-x86_64-standard:3.0'
+        Image: 'aws/codebuild/standard:5.0'
         EnvironmentVariables:
           - Name: RdsEndpoint
             Value: !GetAtt RDSInstance.Endpoint.Address
