@@ -8,7 +8,8 @@ phases:
         runtime-versions:
             python: 3.7
         commands:
-        - apt install mysql-client
+        - apt-get update -y
+        - apt-get install mysql-client -y
         - ls -hal
     build:
         commands:
