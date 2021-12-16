@@ -87,7 +87,7 @@ DATABASES = {
         'NAME': 'djangodb',
         'USER': 'admin',
         'PASSWORD': 'Coucou123!',
-        'HOST': 'piercuta-prod-djangoapp-db-mysql.ceaxgvpd3ste.eu-west-1.rds.amazonaws.com',
+        'HOST': 'pc-prod-djangoapp-db-mysql.ceaxgvpd3ste.eu-west-1.rds.amazonaws.com',
         'PORT': '3306',
         # 'ATOMIC_REQUESTS': True,
     }
