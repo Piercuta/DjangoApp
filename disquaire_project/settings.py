@@ -85,9 +85,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'djangodb',
-        'USER': 'admin',
-        'PASSWORD': 'Coucou123!',
-        'HOST': 'pc-prod-djangoapp-db-mysql.ceaxgvpd3ste.eu-west-1.rds.amazonaws.com',
+        'USER': 'db_user',
+        'PASSWORD': 'db_password',
+        'HOST': 'db_host',
         'PORT': '3306',
         # 'ATOMIC_REQUESTS': True,
     }

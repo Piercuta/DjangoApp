@@ -69,10 +69,6 @@ Parameters:
     Type: String
     Description: ...
     Default: djangoapp
-  DllToStart:
-    Type: String
-    Description: ...
-    Default: ChoixResto.dll
   Client:
     Type: String
     Description: ...
@@ -138,7 +134,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
-      AvailabilityZone: !Select [ 1, !GetAZs  '' ]
+      AvailabilityZone: !Select [ 2, !GetAZs  '' ]
       CidrBlock: !Ref PublicSubnet3CIDR
       MapPublicIpOnLaunch: true
       Tags:
@@ -641,18 +637,30 @@ Resources:
              #!/bin/bash -xe
              echo "START user data instructions"
              
+             apt-get update -y
+             apt update -y
+
              apt install -y ruby
              cd /tmp/
              wget 'https://aws-codedeploy-eu-west-1.s3.eu-west-1.amazonaws.com/latest/install'
              chmod +x ./install
              sudo ./install auto
             
-             apt install python3-pip
+             echo "mysql-client"
+             apt install mysql-client -y
+             echo "python3-pip"
+             apt install python3-pip -y
+             echo "python3-dev build-essential"
              apt install python3-dev build-essential -y
+             echo "install libssl1.1"
              apt install libssl1.1 -y
+             echo "libssl1.1=1.1.1f-1ubuntu2"
              apt install libssl1.1=1.1.1f-1ubuntu2 -y
+             echo "libssl-dev"
              apt install libssl-dev -y
+             echo "libmysqlclient-dev"
              apt install libmysqlclient-dev -y
+             echo "libpq-dev"
              apt install libpq-dev -y
              
              echo "END user data instructions"
@@ -769,24 +777,15 @@ Resources:
         ComputeType: BUILD_GENERAL1_SMALL
         Image: 'aws/codebuild/standard:5.0'
         EnvironmentVariables:
-          - Name: RdsEndpoint
+          - Name: DbHost
             Value: !GetAtt RDSInstance.Endpoint.Address
+          - Name: DbUser
+            Value: !Ref DbUser
+          - Name: DbPassword
+            Value: !Ref DbPassword
           - Name: ApplicationName
             Type: PLAINTEXT
             Value: !Ref ApplicationName
-          - Name: CS
-            Type: PLAINTEXT
-            Value: !Join 
-              - ''
-              - - server=
-                - !GetAtt 
-                  - RDSInstance
-                  - Endpoint.Address
-                - ;user id=
-                - !Ref DbUser
-                - ;password=
-                - !Ref DbPassword
-                - ;database=ChoixResto
       Source:
         Type: CODEPIPELINE
       VpcConfig:
