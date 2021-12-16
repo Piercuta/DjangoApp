@@ -2,7 +2,7 @@ version: 0.0
 os: linux 
 files: 
   - source: / 
-    destination: /var/www/my-temp-dir/
+    destination: /var/www/disquaire/
 hooks:
   ApplicationStart:
     - location: .aws/stopApplication.sh
