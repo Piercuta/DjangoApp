@@ -55,7 +55,7 @@ MIDDLEWARE = [
     'django.middleware.locale.LocaleMiddleware',
 ]
 
-INTERNAL_IPS = ['0.0.0.0']
+INTERNAL_IPS = ['127.0.0.1']
 
 ROOT_URLCONF = 'disquaire_project.urls'
 
@@ -156,7 +156,7 @@ if os.environ.get('ENV') == 'PRODUCTION':
 
 else:
     DEBUG = True
-    ALLOWED_HOSTS = ["*"]
+    ALLOWED_HOSTS = ['*']
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'

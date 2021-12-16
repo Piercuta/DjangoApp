@@ -641,11 +641,19 @@ Resources:
              #!/bin/bash -xe
              echo "START user data instructions"
              
-             yum install -y ruby
-             cd /home/ec2-user/
+             apt install -y ruby
+             cd /tmp/
              wget 'https://aws-codedeploy-eu-west-1.s3.eu-west-1.amazonaws.com/latest/install'
              chmod +x ./install
              sudo ./install auto
+            
+             apt install python3-pip
+             apt install python3-dev build-essential -y
+             apt install libssl1.1 -y
+             apt install libssl1.1=1.1.1f-1ubuntu2 -y
+             apt install libssl-dev -y
+             apt install libmysqlclient-dev -y
+             apt install libpq-dev -y
              
              echo "END user data instructions"
           
