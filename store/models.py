@@ -11,6 +11,7 @@ class Artist(models.Model):
     def __str__(self):
         return self.name
 
+
 class Contact(models.Model):
     email = models.EmailField(max_length=100)
     name = models.CharField(max_length=200)
@@ -27,7 +28,8 @@ class Album(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     available = models.BooleanField(default=True)
     title = models.CharField(max_length=200)
-    picture = models.BinaryField(null=True, editable=True) #models.ImageField(upload_to='images/', blank=True, null = True)
+    # picture = models.BinaryField(null=True, editable=True)
+    picture = models.ImageField(upload_to='images/', blank=True, null=True)
     artists = models.ManyToManyField(Artist, related_name='albums', blank=True)
     # img = models.BinaryField(null = True)
 

@@ -17,8 +17,8 @@
     {% for album in albums %}
         <div class="col-sm-4 text-center">
             <a href="{% url 'store:detail' album_id=album.id %}">
-              <img class="img-responsive" src="data:image/jpeg;base64, {{ album.picture }}" alt="{{ album.title }}" width="350" height="350">
-              <!-- <img class="img-responsive" src="data:image/jpeg;base64, {{ album.img }}"  alt="{{ album.title }}" width="350" height="350"> -->
+              <!-- <img class="img-responsive" src="data:image/jpeg;base64, {{ album.picture }}" alt="{{ album.title }}" width="350" height="350"> -->
+              <img class="img-responsive" src="/media/{{ album.picture }}"  alt="{{ album.title }}" width="350" height="350">
             </a>
             <h3><a href="{% url 'store:detail' album_id=album.id %}">{{ album.title }}</a></h3>
             {% for artist in album.artists.all %}
