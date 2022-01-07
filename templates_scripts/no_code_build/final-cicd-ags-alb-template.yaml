@@ -6,18 +6,6 @@ Parameters:
     Description: Please enter the IP range (CIDR notation) for this VPC
     Type: String
     Default: 10.192.0.0/16
-  PrivateSubnet1CIDR:
-    Description: Please enter the IP range (CIDR notation) for the public subnet in the first Availability Zone
-    Type: String
-    Default: 10.192.20.0/24
-  PrivateSubnet2CIDR:
-    Description: Please enter the IP range (CIDR notation) for the public subnet in the second Availability Zone
-    Type: String
-    Default: 10.192.21.0/24
-  PrivateSubnet3CIDR:
-    Description: Please enter the IP range (CIDR notation) for the public subnet in the second Availability Zone
-    Type: String
-    Default: 10.192.22.0/24
   PublicSubnet1CIDR:
     Description: Please enter the IP range (CIDR notation) for the public subnet in the first Availability Zone
     Type: String
@@ -178,189 +166,6 @@ Resources:
     Properties:
       RouteTableId: !Ref PublicRouteTable
       SubnetId: !Ref PublicSubnet3
-
-  PrivateSubnet1:
-    Type: AWS::EC2::Subnet
-    Properties:
-      VpcId: !Ref VPC
-      AvailabilityZone: !Select [ 0, !GetAZs  '' ]
-      CidrBlock: !Ref PrivateSubnet1CIDR
-      MapPublicIpOnLaunch: false
-      Tags:
-        - Key: Name
-          Value: !Sub ${Client}-${Env}-private-subnet-1
-        - Key: env
-          Value: !Ref Env
-
-  PrivateSubnet2:
-    Type: AWS::EC2::Subnet
-    Properties:
-      VpcId: !Ref VPC
-      AvailabilityZone: !Select [ 1, !GetAZs  '' ]
-      CidrBlock: !Ref PrivateSubnet2CIDR
-      MapPublicIpOnLaunch: false
-      Tags:
-        - Key: Name
-          Value: !Sub ${Client}-${Env}-private-subnet-2
-        - Key: env
-          Value: !Ref Env
-
-  PrivateSubnet3:
-    Type: AWS::EC2::Subnet
-    Properties:
-      VpcId: !Ref VPC
-      AvailabilityZone: !Select [ 2, !GetAZs  '' ]
-      CidrBlock: !Ref PrivateSubnet3CIDR
-      MapPublicIpOnLaunch: false
-      Tags:
-        - Key: Name
-          Value: !Sub ${Client}-${Env}-private-subnet-3
-        - Key: env
-          Value: !Ref Env
-
-  NatGateway1EIP:
-    Type: AWS::EC2::EIP
-    DependsOn: InternetGatewayAttachment
-    Properties:
-      Domain: vpc
-      Tags:
-        - Key: env
-          Value: !Ref Env
-        - Key: Name
-          Value: !Sub ${Client}-${Env}-eip-1
-
-  NatGateway2EIP:
-    Type: AWS::EC2::EIP
-    DependsOn: InternetGatewayAttachment
-    Properties:
-      Domain: vpc
-      Tags:
-        - Key: env
-          Value: !Ref Env
-        - Key: Name
-          Value: !Sub ${Client}-${Env}-eip-2
-
-  NatGateway3EIP:
-    Type: AWS::EC2::EIP
-    DependsOn: InternetGatewayAttachment
-    Properties:
-      Domain: vpc
-      Tags:
-        - Key: env
-          Value: !Ref Env
-        - Key: Name
-          Value: !Sub ${Client}-${Env}-eip-3
-
-  NatGateway1:
-    Type: AWS::EC2::NatGateway
-    Properties:
-      AllocationId: !GetAtt NatGateway1EIP.AllocationId
-      SubnetId: !Ref PublicSubnet1
-      Tags:
-        - Key: env
-          Value: !Ref Env
-        - Key: Name
-          Value: !Sub ${Client}-${Env}-nat-gtw-1
-
-  NatGateway2:
-    Type: AWS::EC2::NatGateway
-    Properties:
-      AllocationId: !GetAtt NatGateway2EIP.AllocationId
-      SubnetId: !Ref PublicSubnet2
-      Tags:
-        - Key: env
-          Value: !Ref Env
-        - Key: Name
-          Value: !Sub ${Client}-${Env}-nat-gtw-2
-
-  NatGateway3:
-    Type: AWS::EC2::NatGateway
-    Properties:
-      AllocationId: !GetAtt NatGateway3EIP.AllocationId
-      SubnetId: !Ref PublicSubnet3
-      Tags:
-        - Key: env
-          Value: !Ref Env
-        - Key: Name
-          Value: !Sub ${Client}-${Env}-nat-gtw-3
-  
-  PrivateRouteTable1:
-    Type: AWS::EC2::RouteTable
-    Properties:
-      VpcId: !Ref VPC
-      Tags:
-        - Key: Name
-          Value: !Sub ${Client}-${Env}-private-route-table-1
-        - Key: env
-          Value: !Ref Env
-
-  DefaultPrivateRoute1:
-    Type: AWS::EC2::Route
-    Properties:
-      RouteTableId: !Ref PrivateRouteTable1
-      DestinationCidrBlock: 0.0.0.0/0
-      NatGatewayId: !Ref NatGateway1
-      # Tags:
-      #   - Key: Name
-      #     Value: !Sub ${Client}-${Env}-default-private-route-1
-
-  PrivateSubnet1RouteTableAssociation:
-    Type: AWS::EC2::SubnetRouteTableAssociation
-    Properties:
-      RouteTableId: !Ref PrivateRouteTable1
-      SubnetId: !Ref PrivateSubnet1
-
-  PrivateRouteTable2:
-    Type: AWS::EC2::RouteTable
-    Properties:
-      VpcId: !Ref VPC
-      Tags:
-        - Key: Name
-          Value: !Sub ${Client}-${Env}-private-route-table-2
-        - Key: env
-          Value: !Ref Env
-
-  DefaultPrivateRoute2:
-    Type: AWS::EC2::Route
-    Properties:
-      RouteTableId: !Ref PrivateRouteTable2
-      DestinationCidrBlock: 0.0.0.0/0
-      NatGatewayId: !Ref NatGateway2
-      # Tags:
-      #   - Key: Name
-      #     Value: !Sub ${Client}-${Env}-default-private-route-3
-
-  PrivateSubnet2RouteTableAssociation:
-    Type: AWS::EC2::SubnetRouteTableAssociation
-    Properties:
-      RouteTableId: !Ref PrivateRouteTable2
-      SubnetId: !Ref PrivateSubnet2
-
-  PrivateRouteTable3:
-    Type: AWS::EC2::RouteTable
-    Properties:
-      VpcId: !Ref VPC
-      Tags:
-        - Key: Name
-          Value: !Sub ${Client}-${Env}-private-route-table-3
-        - Key: env
-          Value: !Ref Env
-
-  DefaultPrivateRoute3:
-    Type: AWS::EC2::Route
-    Properties:
-      RouteTableId: !Ref PrivateRouteTable3
-      DestinationCidrBlock: 0.0.0.0/0
-      NatGatewayId: !Ref NatGateway3
-      # Tags:
-      #   - Key: Name
-      #     Value: !Sub ${Client}-${Env}-default-private-route-3
-
-  PrivateSubnet3RouteTableAssociation:
-    Type: AWS::EC2::SubnetRouteTableAssociation
-    Properties:
-      RouteTableId: !Ref PrivateRouteTable3
-      SubnetId: !Ref PrivateSubnet3
 
   # Database
   
@@ -633,7 +438,8 @@ Resources:
               VolumeSize: 60
               VolumeType: gp2
         UserData:
-          Fn::Base64: !Sub |
+          Fn::Base64: !Sub 
+          - |
              #!/bin/bash -xe
              echo "START user data instructions"
              
@@ -662,8 +468,14 @@ Resources:
              apt install libmysqlclient-dev -y
              echo "libpq-dev..."
              apt install libpq-dev -y
-             
+
+             cd /tmp/
+             echo ${DbPassword} > db_password.txt
+             echo ${DbUser} > db_user.txt
+             echo ${RDS_HOST} > db_host.txt
+                         
              echo "END user data instructions"
+          - RDS_HOST: !GetAtt RDSInstance.Endpoint.Address
           
         TagSpecifications:
           - ResourceType: volume
@@ -718,84 +530,6 @@ Resources:
       ManagedPolicyArns:
         - 'arn:aws:iam::aws:policy/AdministratorAccess'
       Path: /
-      Tags: 
-        - Key: env
-          Value: !Ref Env
-
-  CodeBuildRole:
-    Type: 'AWS::IAM::Role'
-    Properties:
-      RoleName:  !Sub ${Client}-${Env}-${ApplicationName}-code-build-role
-      AssumeRolePolicyDocument:
-        Version: 2012-10-17
-        Statement:
-          - Action:
-              - 'sts:AssumeRole'
-            Effect: Allow
-            Principal:
-              Service:
-                - codebuild.amazonaws.com
-      ManagedPolicyArns:
-        - 'arn:aws:iam::aws:policy/AdministratorAccess'
-      Path: /
-      Tags: 
-        - Key: env
-          Value: !Ref Env
-
-  CodeBuildSecurityGroup:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupName: !Sub ${Client}-${Env}-${ApplicationName}-code-build-sg
-      GroupDescription: "Security group for code build"
-      SecurityGroupEgress:
-      - IpProtocol: -1
-        FromPort: -1
-        ToPort: -1
-        CidrIp: 0.0.0.0/0
-      VpcId: !Ref VPC
-      Tags: 
-        - Key: env
-          Value: !Ref Env
-        - Key: Name
-          Value: !Sub ${Client}-${Env}-${ApplicationName}-code-build-sg
-
-  CodeBuild:
-    Type: 'AWS::CodeBuild::Project'
-    Properties:
-      Name: !Sub ${Client}-${Env}-${ApplicationName}-code-build-project
-      Description: A description about my project
-      LogsConfig:
-        CloudWatchLogs: 
-          Status: DISABLED 
-      ServiceRole: !GetAtt 
-        - CodeBuildRole
-        - Arn
-      Artifacts:
-        Type: CODEPIPELINE
-      Environment:
-        Type: LINUX_CONTAINER
-        ComputeType: BUILD_GENERAL1_SMALL
-        Image: 'aws/codebuild/standard:5.0'
-        EnvironmentVariables:
-          - Name: DbHost
-            Value: !GetAtt RDSInstance.Endpoint.Address
-          - Name: DbUser
-            Value: !Ref DbUser
-          - Name: DbPassword
-            Value: !Ref DbPassword
-          - Name: ApplicationName
-            Type: PLAINTEXT
-            Value: !Ref ApplicationName
-      Source:
-        Type: CODEPIPELINE
-      VpcConfig:
-        SecurityGroupIds: 
-          - !Ref CodeBuildSecurityGroup
-        Subnets: 
-          - !Ref PrivateSubnet1
-          - !Ref PrivateSubnet2
-          - !Ref PrivateSubnet3
-        VpcId: !Ref VPC
       Tags: 
         - Key: env
           Value: !Ref Env
@@ -880,26 +614,11 @@ Resources:
                 PollForSourceChanges: true
               RunOrder: 1
           Name: SOURCE
-        - Name: Build
-          Actions:
-            - Name: BuildAction
-              ActionTypeId:
-                Category: Build
-                Owner: AWS
-                Version: '1'
-                Provider: CodeBuild
-              InputArtifacts:
-                - Name: SourceArtifact
-              OutputArtifacts:
-                - Name: BuildArtifact
-              Configuration:
-                ProjectName: !Ref CodeBuild
-              RunOrder: 1
         - Name: Deploy
           Actions:
             - Name: DeployAction
               InputArtifacts:
-                - Name: BuildArtifact
+                - Name: SourceArtifact
               ActionTypeId:
                 Category: Deploy
                 Owner: AWS
