@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# vscode folder
+.vscode
+
+# token file
+token.txt
