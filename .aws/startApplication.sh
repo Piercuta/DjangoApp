@@ -29,7 +29,8 @@ echo "server {
 			alias /var/www/disquaire/disquaire_project/static/;
 		}
     }" > django.conf
-
+ln django.conf /etc/nginx/sites-enabled/
+nginx -t
 cd /var/www/disquaire
 # gunicorn inside requirements.txt
 pip3 install -r requirements.txt
