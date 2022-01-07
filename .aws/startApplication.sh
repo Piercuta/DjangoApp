@@ -9,6 +9,9 @@ DbUser=$(cat /tmp/db_user.txt)
 DbPassword=$(cat /tmp/db_password.txt)
 DbHost=$(cat /tmp/db_host.txt)
 # Restore sql backup
+cd /var/www/
+mkdir disquaire
+sudo cp -R /var/www/my-temp-dir/* /var/www/disquaire/
 cd /var/www/disquaire
 mysql -h $DbHost -u admin -pCoucou123! < sql_backup/DumpDjangoDb.sql 
 # Replace db conf in django project
@@ -43,3 +46,6 @@ service nginx stop
 service nginx restart
 # Start application
 gunicorn --bind 0.0.0.0:8000 disquaire_project.wsgi:application > /dev/null 2>&1 &
+
+cd  /var/www/my-temp-dir/
+rm -rf *
