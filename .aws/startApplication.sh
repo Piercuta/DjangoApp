@@ -19,15 +19,17 @@ sed -i "s#db_host#${DbHost}#g" disquaire_project/settings.py
 # Nginx Conf
 cd /etc/nginx/sites-available/
 echo "server {
-        server_name_;
-		
+        server_name _;
+
         location / {
-            proxy_pass http://0.0.0.0:8000;
+                # First attempt to serve request as file, then
+                # as directory, then fall back to displaying a 404.
+                proxy_pass http://0.0.0.0:8000;
         }
-		
-		location /static/ {
-			alias /var/www/disquaire/disquaire_project/static/;
-		}
+
+        location /static/ {
+                alias /var/www/disquaire/disquaire_project/static/;
+        }
     }" > django.conf
 ln django.conf /etc/nginx/sites-enabled/
 nginx -t
@@ -35,7 +37,7 @@ cd /var/www/disquaire
 # gunicorn inside requirements.txt
 pip3 install -r requirements.txt
 
-python3 manage.py collectstatic
+echo yes | python3 manage.py collectstatic
 service nginx start
 service nginx stop
 service nginx restart
