@@ -175,9 +175,9 @@ Resources:
       DBSubnetGroupDescription: subnet group for instance mysql
       DBSubnetGroupName: !Sub ${Client}-${Env}-${ApplicationName}-rds-subnet-group
       SubnetIds: 
-        - !Ref PrivateSubnet1
-        - !Ref PrivateSubnet2
-        - !Ref PrivateSubnet3
+        - !Ref PublicSubnet1
+        - !Ref PublicSubnet2
+        - !Ref PublicSubnet3
       Tags: 
         - Key: env
           Value: !Ref Env
@@ -189,10 +189,6 @@ Resources:
       VpcId: !Ref VPC
       GroupDescription: SecurityGroup for RDS instance.
       SecurityGroupIngress:
-        - SourceSecurityGroupId: !GetAtt CodeBuildSecurityGroup.GroupId 
-          FromPort: '3306'
-          ToPort: '3306'
-          IpProtocol: tcp
         - SourceSecurityGroupId: !GetAtt EC2SecurityGroup.GroupId 
           FromPort: '3306'
           ToPort: '3306'
@@ -386,9 +382,9 @@ Resources:
     Properties:
       AutoScalingGroupName: !Sub ${Client}-${Env}-${ApplicationName}-asg
       VPCZoneIdentifier: 
-        - !Ref PrivateSubnet1
-        - !Ref PrivateSubnet2
-        - !Ref PrivateSubnet3
+        - !Ref PublicSubnet1
+        - !Ref PublicSubnet2
+        - !Ref PublicSubnet3
       LaunchTemplate:
         LaunchTemplateId: !Ref AutoScalingLaunchTemplate
         Version: !GetAtt 
@@ -497,10 +493,10 @@ Resources:
     Type: 'AWS::CodeDeploy::DeploymentGroup'
     Properties:
       ApplicationName: !Ref DeployApplication
-      Ec2TagFilters:
-        - Key: deploy
-          Type: KEY_AND_VALUE
-          Value: !Sub ${Client}-${Env}-${ApplicationName}-deploy
+      # Ec2TagFilters:
+      #   - Key: deploy
+      #     Type: KEY_AND_VALUE
+      #     Value: !Sub ${Client}-${Env}-${ApplicationName}-deploy
       ServiceRoleArn: !GetAtt 
         - CodeDeployDGRole
         - Arn
