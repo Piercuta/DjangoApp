@@ -8,7 +8,7 @@ DbPassword=$(cat /tmp/db_password.txt)
 DbHost=$(cat /tmp/db_host.txt)
 # Restore sql backup
 cd /var/www/disquaire
-mysql -h $DbHost -u admin -pCoucou123! < DumpDjangoDb.sql 
+mysql -h $DbHost -u admin -pCoucou123! < sql_backup/DumpDjangoDb.sql 
 # Replace db conf in django project
 sed -i "s#db_user#${DbUser}#g" disquaire_project/settings.py
 sed -i "s#db_password#${DbPassword}#g" disquaire_project/settings.py
