@@ -468,7 +468,8 @@ Resources:
              echo "libmysqlclient-dev..."
              apt install libmysqlclient-dev -y
              echo "libpq-dev..."
-             apt install libpq-dev -y 
+             apt install libpq-dev -y
+             echo "nginx..."
              apt install nginx -y
                          
              echo "END user data instructions"
