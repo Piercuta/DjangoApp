@@ -1,0 +1,9 @@
+version: 0.0 
+os: linux 
+files: 
+  - source: / 
+    destination: /var/www/disquaire/
+hooks:
+  ApplicationStart:
+    - location: .aws/stopApplication.sh
+    - location: .aws/startApplication.sh 
