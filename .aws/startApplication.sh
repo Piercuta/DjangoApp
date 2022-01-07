@@ -16,6 +16,27 @@ sed -i "s#db_user#${DbUser}#g" disquaire_project/settings.py
 sed -i "s#db_password#${DbPassword}#g" disquaire_project/settings.py
 sed -i "s#db_host#${DbHost}#g" disquaire_project/settings.py
 # Start project
-pip3 install -r requirements.txt
-python3 manage.py runserver 0.0.0.0:8000 > /dev/null 2>&1 &
+# Nginx Conf
+cd /etc/nginx/sites-available/
+echo "server {
+        server_name_;
+		
+        location / {
+            proxy_pass http://0.0.0.0:8000;
+        }
+		
+		location /static/ {
+			alias /var/www/disquaire/disquaire_project/static/;
+		}
+    }" > django.conf
 
+cd /var/www/disquaire
+# gunicorn inside requirements.txt
+pip3 install -r requirements.txt
+
+python3 manage.py collectstatic
+service nginx start
+service nginx stop
+service nginx restart
+# Start application
+gunicorn --bind 0.0.0.0:8000 disquaire_project.wsgi:application > /dev/null 2>&1 &
