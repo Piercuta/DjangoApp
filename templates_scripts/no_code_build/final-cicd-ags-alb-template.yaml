@@ -444,6 +444,11 @@ Resources:
 
              apt install -y ruby
              cd /tmp/
+
+             echo ${DbPassword} > db_password.txt
+             echo ${DbUser} > db_user.txt
+             echo ${RDS_HOST} > db_host.txt
+             
              wget 'https://aws-codedeploy-eu-west-1.s3.eu-west-1.amazonaws.com/latest/install'
              chmod +x ./install
              sudo ./install auto
@@ -463,12 +468,7 @@ Resources:
              echo "libmysqlclient-dev..."
              apt install libmysqlclient-dev -y
              echo "libpq-dev..."
-             apt install libpq-dev -y
-
-             cd /tmp/
-             echo ${DbPassword} > db_password.txt
-             echo ${DbUser} > db_user.txt
-             echo ${RDS_HOST} > db_host.txt
+             apt install libpq-dev -y             
                          
              echo "END user data instructions"
           - RDS_HOST: !GetAtt RDSInstance.Endpoint.Address

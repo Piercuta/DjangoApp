@@ -2,6 +2,8 @@
 
 # Start Application
 echo "Start Application"
+echo "Sleep 30 s"
+sleep 30
 # Set var env
 DbUser=$(cat /tmp/db_user.txt)
 DbPassword=$(cat /tmp/db_password.txt)
