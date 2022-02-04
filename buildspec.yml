@@ -13,7 +13,7 @@ phases:
         - ls -hal
     build:
         commands:
-        - mysql -h $DbHost -u admin -pCoucou123! < DumpDjangoDb.sql 
+        - mysql -h $DbHost -u admin -pCoucou123! < sql_backup/DumpDjangoDb.sql
         - sed -i "s#db_user#${DbUser}#g" disquaire_project/settings.py
         - sed -i "s#db_password#${DbPassword}#g" disquaire_project/settings.py
         - sed -i "s#db_host#${DbHost}#g" disquaire_project/settings.py
