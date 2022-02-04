@@ -2,8 +2,8 @@
 
 # Start Application
 echo "Start Application"
-echo "Sleep 30 s"
-sleep 30
+echo "Sleep 60 s"
+sleep 60
 # Set var env
 DbUser=$(cat /tmp/db_user.txt)
 DbPassword=$(cat /tmp/db_password.txt)
@@ -32,6 +32,10 @@ echo "server {
 
         location /static/ {
                 alias /var/www/disquaire/disquaire_project/static/;
+        }
+		
+		location /media/ {
+                alias /var/www/disquaire/media/;
         }
     }" > django.conf
 ln django.conf /etc/nginx/sites-enabled/

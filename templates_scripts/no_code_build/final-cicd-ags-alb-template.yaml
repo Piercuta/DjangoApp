@@ -438,6 +438,7 @@ Resources:
           - |
              #!/bin/bash -xe
              echo "START user data instructions"
+             start_time=$(date +%s)
              
              apt-get update -y
              apt update -y
@@ -471,8 +472,11 @@ Resources:
              apt install libpq-dev -y
              echo "nginx..."
              apt install nginx -y
-                         
-             echo "END user data instructions"
+             
+             end_time=$(date +%s)       
+             elapsed=$(( end_time - start_time ))
+             echo $elapsed
+             echo "END user data instructions ($elapsed)"
           - RDS_HOST: !GetAtt RDSInstance.Endpoint.Address
           
         TagSpecifications:
