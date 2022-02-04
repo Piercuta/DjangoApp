@@ -89,6 +89,7 @@ DATABASES = {
         'PASSWORD': 'db_password',
         'HOST': 'db_host',
         'PORT': '3306',
+		'CONN_MAX_AGE ': 500
         # 'ATOMIC_REQUESTS': True,
     }
 
@@ -155,7 +156,7 @@ if os.environ.get('ENV') == 'PRODUCTION':
     DATABASES['default'].update(db_from_env)
 
 else:
-    DEBUG = True
+    DEBUG = False
     ALLOWED_HOSTS = ['*']
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
