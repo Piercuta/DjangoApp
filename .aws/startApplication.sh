@@ -23,8 +23,8 @@ sed -i "s#db_host#${DbHost}#g" disquaire_project/settings.py
 cd /etc/nginx/sites-available/
 echo "server {
         server_name django.piercuta.com www.django.piercuta.com;
-		error_log  /var/log/nginx_error.log;
-		access_log  /var/log/nginx_access.log;
+		# error_log  /var/log/nginx_error.log;
+		# access_log  /var/log/nginx_access.log;
 		
         location / {
                 # First attempt to serve request as file, then
@@ -54,7 +54,7 @@ service nginx start
 service nginx stop
 service nginx restart
 # Start application
-gunicorn --bind 0.0.0.0:8000 disquaire_project.wsgi:application > /dev/null 2>&1 &
+gunicorn disquaire_project.wsgi:application -c guni_conf.py > /dev/null 2>&1 &
 
 cd  /var/www/my-temp-dir/
 rm -rf *
