@@ -22,21 +22,26 @@ sed -i "s#db_host#${DbHost}#g" disquaire_project/settings.py
 # Nginx Conf
 cd /etc/nginx/sites-available/
 echo "server {
-        server_name _;
-
+        server_name django.piercuta.com www.django.piercuta.com;
+		error_log  /var/log/nginx_error.log;
+		access_log  /var/log/nginx_access.log;
+		
         location / {
                 # First attempt to serve request as file, then
                 # as directory, then fall back to displaying a 404.
                 proxy_pass http://0.0.0.0:8000;
         }
-
-        location /static/ {
-                alias /var/www/disquaire/disquaire_project/static/;
-        }
 		
+		location /static/ {
+			autoindex on;
+			alias /var/www/disquaire;
+		}
+
 		location /media/ {
-                alias /var/www/disquaire/media/;
-        }
+			autoindex on;
+			alias /var/www/disquaire;
+		}
+
     }" > django.conf
 ln django.conf /etc/nginx/sites-enabled/
 nginx -t
