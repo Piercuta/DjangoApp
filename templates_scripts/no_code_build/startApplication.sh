@@ -2,8 +2,8 @@
 
 # Start Application
 echo "Start Application"
-echo "Sleep 30 s"
-sleep 30
+echo "Sleep 5 s"
+sleep 5
 # Set var env
 DbUser=$(cat /tmp/db_user.txt)
 DbPassword=$(cat /tmp/db_password.txt)
@@ -22,17 +22,26 @@ sed -i "s#db_host#${DbHost}#g" disquaire_project/settings.py
 # Nginx Conf
 cd /etc/nginx/sites-available/
 echo "server {
-        server_name _;
-
+        server_name django.piercuta.com www.django.piercuta.com;
+		# error_log  /var/log/nginx_error.log;
+		# access_log  /var/log/nginx_access.log;
+		
         location / {
                 # First attempt to serve request as file, then
                 # as directory, then fall back to displaying a 404.
                 proxy_pass http://0.0.0.0:8000;
         }
+		
+		location /static/ {
+			autoindex on;
+			alias /var/www/disquaire;
+		}
 
-        location /static/ {
-                alias /var/www/disquaire/disquaire_project/static/;
-        }
+		location /media/ {
+			autoindex on;
+			alias /var/www/disquaire;
+		}
+
     }" > django.conf
 ln django.conf /etc/nginx/sites-enabled/
 nginx -t
@@ -45,7 +54,7 @@ service nginx start
 service nginx stop
 service nginx restart
 # Start application
-gunicorn --bind 0.0.0.0:8000 disquaire_project.wsgi:application > /dev/null 2>&1 &
+gunicorn disquaire_project.wsgi:application -c guni_conf.py > /dev/null 2>&1 &
 
 cd  /var/www/my-temp-dir/
 rm -rf *

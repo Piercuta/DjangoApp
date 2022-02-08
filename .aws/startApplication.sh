@@ -19,6 +19,7 @@ sed -i "s#db_user#${DbUser}#g" disquaire_project/settings.py
 sed -i "s#db_password#${DbPassword}#g" disquaire_project/settings.py
 sed -i "s#db_host#${DbHost}#g" disquaire_project/settings.py
 # Start project
+
 # Nginx Conf
 cd /etc/nginx/sites-available/
 echo "server {
@@ -45,14 +46,19 @@ echo "server {
     }" > django.conf
 ln django.conf /etc/nginx/sites-enabled/
 nginx -t
+
 cd /var/www/disquaire
 # gunicorn inside requirements.txt
 pip3 install -r requirements.txt
 
 echo yes | python3 manage.py collectstatic
-service nginx start
-service nginx stop
-service nginx restart
+
+# load balancer and listener rule manage traffic
+
+# service nginx start
+# service nginx stop
+# service nginx restart
+
 # Start application
 gunicorn disquaire_project.wsgi:application -c guni_conf.py > /dev/null 2>&1 &
 
