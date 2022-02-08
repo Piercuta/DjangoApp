@@ -19,40 +19,46 @@ sed -i "s#db_user#${DbUser}#g" disquaire_project/settings.py
 sed -i "s#db_password#${DbPassword}#g" disquaire_project/settings.py
 sed -i "s#db_host#${DbHost}#g" disquaire_project/settings.py
 # Start project
+
 # Nginx Conf
-cd /etc/nginx/sites-available/
-echo "server {
-        server_name django.piercuta.com www.django.piercuta.com;
-		# error_log  /var/log/nginx_error.log;
-		# access_log  /var/log/nginx_access.log;
+# cd /etc/nginx/sites-available/
+# echo "server {
+        # server_name django.piercuta.com www.django.piercuta.com;
+		# # error_log  /var/log/nginx_error.log;
+		# # access_log  /var/log/nginx_access.log;
 		
-        location / {
-                # First attempt to serve request as file, then
-                # as directory, then fall back to displaying a 404.
-                proxy_pass http://0.0.0.0:8000;
-        }
+        # location / {
+                # # First attempt to serve request as file, then
+                # # as directory, then fall back to displaying a 404.
+                # proxy_pass http://0.0.0.0:8000;
+        # }
 		
-		location /static/ {
-			autoindex on;
-			alias /var/www/disquaire;
-		}
+		# location /static/ {
+			# autoindex on;
+			# alias /var/www/disquaire;
+		# }
 
-		location /media/ {
-			autoindex on;
-			alias /var/www/disquaire;
-		}
+		# location /media/ {
+			# autoindex on;
+			# alias /var/www/disquaire;
+		# }
 
-    }" > django.conf
-ln django.conf /etc/nginx/sites-enabled/
-nginx -t
+    # }" > django.conf
+# ln django.conf /etc/nginx/sites-enabled/
+# nginx -t
+
 cd /var/www/disquaire
 # gunicorn inside requirements.txt
 pip3 install -r requirements.txt
 
 echo yes | python3 manage.py collectstatic
-service nginx start
-service nginx stop
-service nginx restart
+
+# load balancer and listener rule manage traffic
+
+# service nginx start
+# service nginx stop
+# service nginx restart
+
 # Start application
 gunicorn disquaire_project.wsgi:application -c guni_conf.py > /dev/null 2>&1 &
 

@@ -467,8 +467,8 @@ Resources:
              apt install libmysqlclient-dev -y
              echo "libpq-dev..."
              apt install libpq-dev -y
-             echo "nginx..."
-             apt install nginx -y
+             # echo "nginx..."
+             # apt install nginx -y
              
              wget 'https://aws-codedeploy-eu-west-1.s3.eu-west-1.amazonaws.com/latest/install'
              chmod +x ./install

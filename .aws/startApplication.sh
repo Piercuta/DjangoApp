@@ -21,31 +21,31 @@ sed -i "s#db_host#${DbHost}#g" disquaire_project/settings.py
 # Start project
 
 # Nginx Conf
-cd /etc/nginx/sites-available/
-echo "server {
-        server_name django.piercuta.com www.django.piercuta.com;
-		# error_log  /var/log/nginx_error.log;
-		# access_log  /var/log/nginx_access.log;
+# cd /etc/nginx/sites-available/
+# echo "server {
+        # server_name django.piercuta.com www.django.piercuta.com;
+		# # error_log  /var/log/nginx_error.log;
+		# # access_log  /var/log/nginx_access.log;
 		
-        location / {
-                # First attempt to serve request as file, then
-                # as directory, then fall back to displaying a 404.
-                proxy_pass http://0.0.0.0:8000;
-        }
+        # location / {
+                # # First attempt to serve request as file, then
+                # # as directory, then fall back to displaying a 404.
+                # proxy_pass http://0.0.0.0:8000;
+        # }
 		
-		location /static/ {
-			autoindex on;
-			alias /var/www/disquaire;
-		}
+		# location /static/ {
+			# autoindex on;
+			# alias /var/www/disquaire;
+		# }
 
-		location /media/ {
-			autoindex on;
-			alias /var/www/disquaire;
-		}
+		# location /media/ {
+			# autoindex on;
+			# alias /var/www/disquaire;
+		# }
 
-    }" > django.conf
-ln django.conf /etc/nginx/sites-enabled/
-nginx -t
+    # }" > django.conf
+# ln django.conf /etc/nginx/sites-enabled/
+# nginx -t
 
 cd /var/www/disquaire
 # gunicorn inside requirements.txt
