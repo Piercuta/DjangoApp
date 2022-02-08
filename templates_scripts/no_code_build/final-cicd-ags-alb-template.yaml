@@ -438,6 +438,7 @@ Resources:
           - |
              #!/bin/bash -xe
              echo "START user data instructions"
+             
              start_time=$(date +%s)
              
              apt-get update -y
@@ -449,11 +450,7 @@ Resources:
              echo ${DbPassword} > db_password.txt
              echo ${DbUser} > db_user.txt
              echo ${RDS_HOST} > db_host.txt
-
-             wget 'https://aws-codedeploy-eu-west-1.s3.eu-west-1.amazonaws.com/latest/install'
-             chmod +x ./install
-             sudo ./install auto
-            
+ 
              echo "mysql-client..."
              apt install mysql-client -y
              echo "python3-pip..."
@@ -473,10 +470,14 @@ Resources:
              echo "nginx..."
              apt install nginx -y
              
+             wget 'https://aws-codedeploy-eu-west-1.s3.eu-west-1.amazonaws.com/latest/install'
+             chmod +x ./install
+             sudo ./install auto
+             
              end_time=$(date +%s)       
              elapsed=$(( end_time - start_time ))
-             echo $elapsed
-             echo "END user data instructions ($elapsed)"
+             
+             echo "END user data instructions ($elapsed seconds)"
           - RDS_HOST: !GetAtt RDSInstance.Endpoint.Address
           
         TagSpecifications:
