@@ -3,7 +3,7 @@
 bind = "0.0.0.0:8000"
 # (2 * cpu) +1
 workers = 5
-# threads = 2
+threads = 3
 # Access log - records incoming HTTP requests
 accesslog = "/var/log/gunicorn.access.log"
 # Error log - records Gunicorn server goings-on
