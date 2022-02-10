@@ -89,7 +89,7 @@ DATABASES = {
         'PASSWORD': 'db_password',
         'HOST': 'db_host',
         'PORT': '3306',
-		'CONN_MAX_AGE ': 0
+		'CONN_MAX_AGE ': None
         # 'ATOMIC_REQUESTS': True,
     }
 
