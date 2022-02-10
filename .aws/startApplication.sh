@@ -60,9 +60,7 @@ echo yes | python3 manage.py collectstatic
 # service nginx restart
 
 # Start application
-# gunicorn disquaire_project.wsgi:application -c guni_conf.py > /dev/null 2>&1 &
-
-python3 manage.py runserver 0.0.0.0:8000 > /dev/null 2>&1 &
+gunicorn disquaire_project.wsgi:application -c guni_conf.py > /dev/null 2>&1 &
 
 cd  /var/www/my-temp-dir/
 rm -rf *
