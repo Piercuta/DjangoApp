@@ -60,6 +60,7 @@ echo yes | python3 manage.py collectstatic
 # service nginx restart
 
 # Start application
+
 # gunicorn disquaire_project.wsgi:application -c guni_conf.py > /dev/null 2>&1 &
 nohup gunicorn disquaire_project.wsgi:application -c guni_conf.py &
 

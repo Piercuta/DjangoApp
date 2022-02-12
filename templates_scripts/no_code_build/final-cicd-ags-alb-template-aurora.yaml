@@ -422,7 +422,7 @@ Resources:
       LaunchTemplateName: !Sub ${Client}-${Env}-${ApplicationName}-lt
       LaunchTemplateData:
         ImageId: ami-08ca3fed11864d6bb
-        InstanceType: t2.micro
+        InstanceType: t3.medium
         IamInstanceProfile:
           Name: !Ref EC2InstanceProfile
         NetworkInterfaces:

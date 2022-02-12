@@ -3,12 +3,12 @@
 bind = "0.0.0.0:8000"
 # (2 * cpu) +1
 workers = 5
-threads = 3
+# threads = 3
 # Access log - records incoming HTTP requests
 accesslog = "/var/log/gunicorn.access.log"
 # Error log - records Gunicorn server goings-on
 errorlog = "/var/log/gunicorn.error.log"
-# Whether to send Django output to the error log 
+# Whether to send Django output to the error log
 capture_output = True
-# How verbose the Gunicorn error logs should be 
+# How verbose the Gunicorn error logs should be
 loglevel = "info"
